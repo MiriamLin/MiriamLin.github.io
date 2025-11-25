@@ -1,7 +1,1 @@
-This is my website.
-
-## Run locally
-
-```bash
-npm run dev
-```
+This is my personal website.
