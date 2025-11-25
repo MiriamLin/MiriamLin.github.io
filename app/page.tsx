@@ -1,65 +1,142 @@
-import Image from "next/image";
+import EducationEntry from "./components/education-entry";
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="mx-auto mt-12 max-w-4xl px-6 space-y-14">
+      <section className="space-y-4">
+        <h1 className="text-5xl font-semibold leading-tight text-black">
+          Miriam Lin
+        </h1>
+      </section>
+
+      <section className="space-y-6">
+        <header className="space-y-2">
+          <p className="text-sm uppercase tracking-wide text-zinc-500">Working Experience</p>
+        </header>
+        <article className="space-y-3 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-sm">
+          <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+            <h3 className="text-xl font-semibold text-black">Amazon, eero</h3>
+            <span className="text-sm uppercase tracking-wide text-zinc-500">
+              Jun 2025 – Nov 2025
+            </span>
+          </header>
+          <p className="text-base font-medium text-black">
+            Software Development Engineer Intern
           </p>
+          <ul className="list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-700">
+            <li>
+              Developed a pytest-based automated validation pipeline for firmware image testing on eero embedded devices.
+            </li>
+            <li>
+              Integrated Serial/Telnet communication, GitLab CI/CD triggers, TFTP/SCP transfer, image flashing, connectivity tests, and functional tests into a unified workflow.
+            </li>
+            <li>
+              Improved image bundle validation speed, consistency, and robustness.
+            </li>
+          </ul>
+        </article>
+      </section>
+
+      <section className="space-y-6">
+        <header className="space-y-2">
+          <p className="text-sm uppercase tracking-wide text-zinc-500">Research Experience</p>
+        </header>
+        <div className="space-y-4">
+          <article className="space-y-2 rounded-2xl border border-zinc-200 bg-white/70 p-5 shadow-sm">
+            <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+              <h3 className="text-xl font-semibold text-black">Vision and Learning Lab</h3>
+              <span className="text-xs uppercase tracking-wide text-zinc-500">
+                Sep 2025 – Present
+              </span>
+            </header>
+            <p className="text-base leading-relaxed text-zinc-700">
+              Researched physical reasoning via model reasoning and visual imagination.
+            </p>
+          </article>
+
+          <article className="space-y-2 rounded-2xl border border-zinc-200 bg-white/70 p-5 shadow-sm">
+            <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+              <h3 className="text-xl font-semibold text-black">
+                NTU Artificial Intelligence Security Lab
+              </h3>
+              <span className="text-xs uppercase tracking-wide text-zinc-500">
+                Feb 2025 – Present
+              </span>
+            </header>
+            <p className="text-base leading-relaxed text-zinc-700">
+              Researched large language model security focusing on RAG and LoRA adapters for role-based access control.
+            </p>
+          </article>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="space-y-6">
+        <header className="space-y-2">
+          <p className="text-sm uppercase tracking-wide text-zinc-500">Education</p>
+        </header>
+        <div className="space-y-8 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-sm">
+          <EducationEntry
+            school="National Taiwan University"
+            degree="B.S. in Computer Science & Information Engineering"
+            gpa="GPA: 4.21 / 4.30"
+            dateRange="Sep 2023 – Jun 2027"
+            courses={[
+              { name: "Applied Deep Learning", tags: ["Python", "Deep Learning"] },
+              { name: "Machine Learning", tags: ["Python", "Machine Learning"] },
+              { name: "Operating Systems", tags: ["C"] },
+              { name: "Systems Programming", tags: ["C", "Linux"] },
+              { name: "Computer Networks", tags: ["C++"] },
+              { name: "Linear Algebra", tags: ["Math"] },
+              { name: "Probability", tags: ["Math"] },
+              { name: "Calculus",tags: ["Math"]},
+              { name: "Computer Architecture", tags: ["Verilog", "RISC-V"] },
+              { name: "Computer System Laboratory", tags: ["Embedded Systems", "HCI"] },
+              { name: "Virtual Reality Game Programming", tags: ["AR/VR", "Unity", "C#"] },
+              { name: "Data Structures and Algorithms",tags: ["Algorithms", "Data Structures", "C++"]},
+              { name: "Algorithm Design and Analysis",tags: ["Algorithms", "Problem Solving"]},
+              { name: "Foundations of Artificial Intelligence",tags: ["Classical AI", "Machine Learning"]},
+              { name: "Introduction to FinTech",tags: ["Solidity"]},
+              { name: "Introduction to Computer Programming",tags: ["C"]},
+            ]}
+          />
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="space-y-6">
+        <header className="space-y-2">
+          <p className="text-sm uppercase tracking-wide text-zinc-500">Skills</p>
+        </header>
+        <div className="space-y-3 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-sm">
+          {[
+            ["Python", "C", "C++", "C#", "JavaScript", "TypeScript", "Swift"],
+            [
+              "Git",
+              "GitHub",
+              "GitLab",
+              "Docker",
+              "React",
+              "Unity",
+              "Linux",
+              "Jira",
+              "Machine Learning",
+              "PyTorch",
+              "Algorithms",
+              "Data Structures",
+            ],
+          ].map((row, index) => (
+            <div key={index} className="flex flex-wrap gap-3">
+              {row.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm font-normal text-slate-700"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
   );
 }
