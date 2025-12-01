@@ -15,7 +15,7 @@ export default function Home() {
         </header>
         <article className="space-y-3 rounded-2xl border border-zinc-200 bg-white/70 p-6 shadow-sm">
           <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-            <h3 className="text-xl font-semibold text-black">Amazon, eero</h3>
+            <h3 className="text-xl font-semibold text-black">Amazon</h3>
             <span className="text-sm uppercase tracking-wide text-zinc-500">
               Jun 2025 – Nov 2025
             </span>
@@ -44,14 +44,22 @@ export default function Home() {
         <div className="space-y-4">
           <article className="space-y-2 rounded-2xl border border-zinc-200 bg-white/70 p-5 shadow-sm">
             <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-              <h3 className="text-xl font-semibold text-black">Vision and Learning Lab</h3>
+              <h3 className="text-xl font-semibold text-black">NTU Vision and Learning Lab</h3>
               <span className="text-xs uppercase tracking-wide text-zinc-500">
                 Sep 2025 – Present
               </span>
             </header>
-            <p className="text-base leading-relaxed text-zinc-700">
-              Researched physical reasoning via model reasoning and visual imagination.
-            </p>
+            <ul className="list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-700">
+            <li>
+              Conducted research on physical reasoning in multimodal LLMs, integrating textual context, intermediate visual generation, and tool usage to improve problem-solving performance.
+            </li>
+            <li>
+              Developed a pipeline enabling models to generate sketches, auxiliary lines, and visual cues for geometric and physical reasoning tasks.
+            </li>
+            <li>
+              Investigated multimodal reasoning methods, specifically Chain-of-Thought and self-reflection, to enhance physical reasoning capabilities.
+            </li>
+          </ul>
           </article>
 
           <article className="space-y-2 rounded-2xl border border-zinc-200 bg-white/70 p-5 shadow-sm">
@@ -63,9 +71,30 @@ export default function Home() {
                 Feb 2025 – Present
               </span>
             </header>
-            <p className="text-base leading-relaxed text-zinc-700">
-              Researched large language model security focusing on RAG and LoRA adapters for role-based access control.
-            </p>
+            <ul className="list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-700">
+            <li>
+              Researched large language model security by applying RAG pipelines and LoRA adapters to enforce role-based access control.
+            </li>
+            <li>
+              Improved access control robustness and reduced unauthorized information leakage, validated through benchmark evaluation and practical validation.
+            </li>
+          </ul>
+          </article>
+
+          <article className="space-y-2 rounded-2xl border border-zinc-200 bg-white/70 p-5 shadow-sm">
+            <header className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
+              <h3 className="text-xl font-semibold text-black">
+                NTUCM, Graduate Institute of Immunology
+              </h3>
+              <span className="text-xs uppercase tracking-wide text-zinc-500">
+                Jul 2021 - Jan 2023
+              </span>
+            </header>
+            <ul className="list-disc space-y-2 pl-5 text-base leading-relaxed text-zinc-700">
+            <li>
+              Researched how the neurotransmitters SP and GABA modulate the activation of allergy-associated immune cells.
+            </li>
+          </ul>
           </article>
         </div>
       </section>
