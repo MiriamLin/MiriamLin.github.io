@@ -110,14 +110,16 @@ export default function Home() {
             gpa="GPA: 4.21 / 4.30"
             dateRange="Sep 2023 – Jun 2027"
             courses={[
+              { name: "Deep Learning for Computer Vision", tags: ["Python", "Diffusion model", "3D Vision"] },
               { name: "Applied Deep Learning", tags: ["Python", "Deep Learning"] },
               { name: "Machine Learning", tags: ["Python", "Machine Learning"] },
-              { name: "Operating Systems", tags: ["C"] },
-              { name: "Systems Programming", tags: ["C", "Linux"] },
-              { name: "Computer Networks", tags: ["C++"] },
+              { name: "Special Topics in Innovative Integration of Medicine and EECS", tags: ["VR", "3D Vision"] },
               { name: "Linear Algebra", tags: ["Math"] },
               { name: "Probability", tags: ["Math"] },
               { name: "Calculus",tags: ["Math"]},
+              { name: "Operating Systems", tags: ["C"] },
+              { name: "Systems Programming", tags: ["C", "Linux"] },
+              { name: "Computer Networks", tags: ["C++"] },
               { name: "Computer Architecture", tags: ["Verilog", "RISC-V"] },
               { name: "Computer System Laboratory", tags: ["Embedded Systems", "HCI"] },
               { name: "Virtual Reality Game Programming", tags: ["AR/VR", "Unity", "C#"] },
