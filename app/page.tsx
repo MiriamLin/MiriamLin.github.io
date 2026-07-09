@@ -124,16 +124,6 @@ export default function Home() {
         </h2>
         <div className="mt-5 space-y-6">
           <EducationEntry
-            school="University of Edinburgh"
-            degree="Exchange student"
-            dateRange="Jan 2026 – May 2026"
-            courses={[
-              { name: "Machine Learning", tags: ["Machine Learning"] },
-              { name: "Object Oriented Programming", tags: ["Programming"] },
-              { name: "Cognitive Science", tags: ["Cognitive Science"] },
-            ]}
-          />
-          <EducationEntry
             school="National Taiwan University"
             degree="B.S. in Computer Science & Information Engineering"
             gpa="GPA: 4.21 / 4.30"
@@ -157,6 +147,16 @@ export default function Home() {
               { name: "Foundations of Artificial Intelligence", tags: ["Classical AI", "Machine Learning"] },
               { name: "Introduction to FinTech", tags: ["Solidity"] },
               { name: "Introduction to Computer Programming", tags: ["C"] },
+            ]}
+          />
+          <EducationEntry
+            school="University of Edinburgh"
+            degree="Exchange Student, School of Informatics"
+            dateRange="Jan 2026 – May 2026"
+            courses={[
+              { name: "Machine Learning", tags: ["Python", "Machine Learning"] },
+              { name: "Object Oriented Programming", tags: ["Java"] },
+              { name: "Cognitive Science", tags: ["Cognitive Science"] },
             ]}
           />
         </div>
