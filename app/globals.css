@@ -1,8 +1,15 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+}
+
+.dark {
+  --background: #0c0c0e;
+  --foreground: #e5e5e7;
 }
 
 @theme inline {
@@ -12,15 +19,43 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+}
+
+::selection {
+  background: #1e3a8a;
+  color: #ffffff;
+}
+
+/* Touch devices have no hover — keep desk object labels faintly visible */
+@media (hover: none) {
+  .desk-label {
+    color: rgb(255 255 255 / 0.65) !important;
+  }
+}
+
+/* Terminal cursor blink */
+@keyframes terminal-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Lamp-driven theme switch: briefly animate every themed color on the page.
+   Added/removed by ThemeLamp around the .dark toggle. */
+html.theme-transition,
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color 500ms ease,
+    border-color 500ms ease,
+    color 500ms ease,
+    fill 500ms ease,
+    stroke 500ms ease,
+    box-shadow 500ms ease,
+    opacity 500ms ease !important;
+  transition-delay: 0s !important;
 }

@@ -25,7 +25,7 @@ function renderMarkdown(markdown: string) {
   const flushParagraph = () => {
     if (paragraph.length) {
       elements.push(
-        <p key={elements.length} className="text-base leading-7 text-zinc-800">
+        <p key={elements.length} className="text-base leading-7 text-zinc-800 dark:text-zinc-300">
           {paragraph.join(" ")}
         </p>
       );
@@ -38,7 +38,7 @@ function renderMarkdown(markdown: string) {
       elements.push(
         <ul
           key={elements.length}
-          className="list-disc space-y-2 pl-6 text-base leading-relaxed text-zinc-800"
+          className="list-disc space-y-2 pl-6 text-base leading-relaxed text-zinc-800 dark:text-zinc-300"
         >
           {list.map((item, idx) => (
             <li key={idx}>{item}</li>
@@ -54,7 +54,7 @@ function renderMarkdown(markdown: string) {
       elements.push(
         <pre
           key={elements.length}
-          className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-950 p-4 text-sm text-zinc-50 shadow-inner"
+          className="overflow-x-auto rounded-lg border border-zinc-200 bg-zinc-950 dark:border-zinc-700 p-4 text-sm text-zinc-50 shadow-inner"
         >
           <code className={codeLang ? `language-${codeLang}` : undefined}>{code.join("\n")}</code>
         </pre>
@@ -93,7 +93,7 @@ function renderMarkdown(markdown: string) {
       flushParagraph();
       flushList();
       elements.push(
-        <h1 key={elements.length} className="text-3xl font-bold text-black">
+        <h1 key={elements.length} className="text-3xl font-bold text-black dark:text-zinc-100">
           {line.replace(/^#\s+/, "").trim()}
         </h1>
       );
@@ -104,7 +104,7 @@ function renderMarkdown(markdown: string) {
       flushParagraph();
       flushList();
       elements.push(
-        <h2 key={elements.length} className="text-2xl font-semibold text-black">
+        <h2 key={elements.length} className="text-2xl font-semibold text-black dark:text-zinc-100">
           {line.replace(/^##\s+/, "").trim()}
         </h2>
       );
@@ -136,11 +136,13 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   return (
-    <main className="mx-auto mt-12 max-w-3xl px-6">
+    <main className="mx-auto max-w-3xl px-6 py-12">
       <header className="space-y-2">
-        <h1 className="text-4xl font-black text-black">{post.title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+          {post.title}
+        </h1>
         <time
-          className="text-sm uppercase tracking-wide text-zinc-500"
+          className="font-mono text-xs text-zinc-500 dark:text-zinc-400"
           dateTime={new Date(post.dateMs).toISOString()}
         >
           {new Date(post.dateMs).toLocaleDateString("en-US", {

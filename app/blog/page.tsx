@@ -5,36 +5,42 @@ export default async function BlogPage() {
   const posts = await getPostList();
   // articles in content/blog/
   return (
-    <main className="mx-auto mt-12 max-w-4xl px-6">
-      <section className="mt-12">
+    <main className="mx-auto max-w-3xl px-6 py-12">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">Blog</h1>
+
+      <section className="mt-8">
         {posts.length === 0 ? (
-          <p className="text-center text-zinc-600">No posts yet. Drop a markdown file in content/blog.</p>
+          <p className="text-[15px] text-zinc-600 dark:text-zinc-400">
+            No posts yet. Drop a markdown file in content/blog.
+          </p>
         ) : (
-          <div className="flex flex-col gap-5">
+          <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
             {posts.map((post) => (
               <article
                 key={post.slug}
-                className="rounded-xl border border-zinc-200 bg-white p-5 shadow-[0_12px_30px_rgba(0,0,0,0.06)] transition hover:-translate-y-0.5"
+                className="flex flex-col gap-1 py-5 sm:flex-row sm:gap-6"
               >
-                <header className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+                <time
+                  className="shrink-0 pt-0.5 font-mono text-xs text-zinc-500 sm:w-24 dark:text-zinc-400"
+                  dateTime={new Date(post.dateMs).toISOString()}
+                >
+                  {new Date(post.dateMs).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </time>
+                <div className="min-w-0">
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="text-xl font-semibold text-black underline-offset-4 hover:underline"
+                    className="font-semibold text-zinc-900 underline-offset-4 dark:text-zinc-100 hover:underline"
                   >
                     {post.title}
                   </Link>
-                  <time
-                    className="text-sm uppercase tracking-wide text-zinc-500"
-                    dateTime={new Date(post.dateMs).toISOString()}
-                  >
-                    {new Date(post.dateMs).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </time>
-                </header>
-                <p className="mt-2 text-sm leading-relaxed text-zinc-700">{post.preview}</p>
+                  <p className="mt-1 text-[15px] leading-relaxed text-zinc-600 dark:text-zinc-400">
+                    {post.preview}
+                  </p>
+                </div>
               </article>
             ))}
           </div>

@@ -52,62 +52,63 @@ const projects: Project[] = [
 
 export default function ProjectsPage() {
   return (
-    <main className="mx-auto mt-12 max-w-6xl px-6">
-      <section className="mt-12">
-        <div className="flex flex-wrap gap-8">
-          {projects.map((project) => (
-            <article
-              key={project.title}
-              className="group relative isolate flex basis-full flex-col gap-3 overflow-hidden rounded-xl border-2 border-blue-900 bg-white p-3 text-black shadow-[10px_10px_0_0_rgba(13,43,110,0.9)] transition-transform duration-150 hover:-translate-y-1 sm:basis-[calc((100%-32px)/2)] lg:basis-[calc((100%-64px)/3)]"
+    <main className="mx-auto max-w-3xl px-6 py-12">
+      <h1 className="text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+        Projects
+      </h1>
+
+      <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2">
+        {projects.map((project) => (
+          <article
+            key={project.title}
+            className="group relative isolate flex flex-col gap-3 overflow-hidden rounded-xl border-2 border-blue-900 bg-white p-3 text-black dark:border-blue-400/60 dark:bg-zinc-900 dark:text-zinc-100 dark:shadow-[10px_10px_0_0_#1e3a5f] dark:hover:shadow-[12px_12px_0_0_#1e3a5f] dark:active:shadow-[5px_5px_0_0_#1e3a5f] shadow-[10px_10px_0_0_#1e3a8a] transition-all duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[12px_12px_0_0_#1e3a8a] active:translate-x-1 active:translate-y-1 active:shadow-[5px_5px_0_0_#1e3a8a]"
+          >
+            <div className="relative aspect-[5/3] overflow-hidden rounded-lg border border-blue-900/20 bg-white shadow-inner dark:border-blue-400/20">
+              <img
+                src={project.image}
+                alt={`${project.title} graphic`}
+                loading="lazy"
+                className="h-full w-full object-fill"
+              />
+            </div>
+
+            <div
+              className={`flex items-center gap-3 ${
+                project.link?.trim() ? "justify-between" : ""
+              }`}
             >
-              <div className="absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br from-blue-900/50 via-blue-900/30 to-transparent blur-3xl" />
-              <div className="relative aspect-[5/3] overflow-hidden rounded-xl border border-blue-900/20 bg-white shadow-inner">
-                <div className="absolute -inset-6 bg-gradient-to-br from-blue-900/5 via-transparent to-transparent blur-xl" />
-                <img
-                  src={project.image}
-                  alt={`${project.title} graphic`}
-                  className="relative h-full w-full object-fill"
-                />
-              </div>
+              <h2 className="text-lg font-semibold text-black dark:text-zinc-100">
+                {project.title}
+              </h2>
+              {project.link?.trim() && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 rounded-full border border-blue-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-900 transition hover:-translate-y-0.5 hover:bg-blue-900 hover:text-white dark:border-blue-400/60 dark:text-blue-300 dark:hover:bg-blue-400 dark:hover:text-zinc-950"
+                >
+                  Link
+                </a>
+              )}
+            </div>
 
-              <div
-                className={`flex items-center gap-3 ${
-                  project.link?.trim() ? "justify-between" : ""
-                }`}
-              >
-                <h3 className="text-lg font-semibold text-black">
-                  {project.title}
-                </h3>
-                {project.link?.trim() && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-blue-900 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-blue-900 transition hover:-translate-y-0.5 hover:bg-blue-900 hover:text-white"
-                  >
-                    Link
-                  </a>
-                )}
-              </div>
+            <p className="text-sm leading-relaxed text-zinc-700 dark:text-zinc-300">
+              {project.description}
+            </p>
 
-              <p className="text-sm leading-relaxed text-zinc-700">
-                {project.description}
-              </p>
-
-              <div className="flex flex-wrap gap-2">
-                {project.skills.map((skill) => (
-                  <span
-                    key={skill}
-                    className="rounded-full border border-blue-900/40 bg-blue-50 px-3 py-1 text-xs font-semibold tracking-wide text-blue-900"
-                  >
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+            <div className="mt-auto flex flex-wrap gap-2 pt-1">
+              {project.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="rounded-full border border-blue-900/25 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-800 dark:border-blue-400/25 dark:bg-blue-950/40 dark:text-blue-300"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </article>
+        ))}
+      </div>
     </main>
   );
 }

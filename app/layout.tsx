@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Nunito, DM_Mono } from "next/font/google";
 import "./globals.css";
 import MainNav from "./components/main-nav";
 
-const geistSans = Geist({
+const sans = Nunito({
   variable: "--font-geist-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
+const mono = DM_Mono({
   variable: "--font-geist-mono",
+  weight: ["400", "500"],
   subsets: ["latin"],
 });
 
@@ -27,14 +28,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `try{if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}}catch(e){}`,
+          }}
+        />
+      </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${sans.variable} ${mono.variable} antialiased`}
       >
         <MainNav />
         {children}
-        <footer className="mx-auto my-12 w-full max-w-6xl border-t border-zinc-200 px-6 py-8 text-center text-sm text-zinc-500">
-          © {new Date().getFullYear()} Miriam Lin. All rights reserved.
+        <footer className="mx-auto mt-16 w-full max-w-3xl px-6 pb-12">
+          <p className="border-t border-zinc-200 pt-6 text-center font-mono text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+            © {new Date().getFullYear()} Miriam Lin
+          </p>
         </footer>
       </body>
     </html>
