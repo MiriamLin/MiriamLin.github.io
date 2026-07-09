@@ -122,7 +122,17 @@ export default function Home() {
         <h2 className="font-mono text-xs uppercase tracking-[0.15em] text-zinc-500 dark:text-zinc-400">
           Education
         </h2>
-        <div className="mt-5">
+        <div className="mt-5 space-y-6">
+          <EducationEntry
+            school="University of Edinburgh"
+            degree="Exchange student"
+            dateRange="Jan 2026 – May 2026"
+            courses={[
+              { name: "Machine Learning", tags: ["Machine Learning"] },
+              { name: "Object Oriented Programming", tags: ["Programming"] },
+              { name: "Cognitive Science", tags: ["Cognitive Science"] },
+            ]}
+          />
           <EducationEntry
             school="National Taiwan University"
             degree="B.S. in Computer Science & Information Engineering"

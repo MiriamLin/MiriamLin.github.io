@@ -6,7 +6,7 @@ type Course = {
 type EducationEntryProps = {
   school: string;
   degree: string;
-  gpa: string;
+  gpa?: string;
   dateRange: string;
   courses: Course[];
 };
@@ -28,7 +28,9 @@ export default function EducationEntry({
           </span>
         </div>
         <p className="mt-0.5 text-[15px] text-zinc-700 dark:text-zinc-300">{degree}</p>
-        <p className="mt-0.5 font-mono text-xs text-zinc-500 dark:text-zinc-400">{gpa}</p>
+        {gpa ? (
+          <p className="mt-0.5 font-mono text-xs text-zinc-500 dark:text-zinc-400">{gpa}</p>
+        ) : null}
         <span className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-blue-900/25 bg-blue-50 px-3 py-1 text-xs font-medium text-blue-800 transition-colors group-hover:bg-blue-100 dark:border-blue-400/25 dark:bg-blue-950/40 dark:text-blue-300 dark:group-hover:bg-blue-950/70">
           <span className="group-open:hidden">View coursework</span>
           <span className="hidden group-open:inline">Hide coursework</span>
