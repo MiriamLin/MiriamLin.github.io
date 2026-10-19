@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionConfig } from "framer-motion";
 import Modal from "./Modal";
 
 // ── Edit your reading list here — add as many books as you like ──────────
@@ -108,28 +108,170 @@ const BOOKS: BookEntry[] = [
 ];
 // ──────────────────────────────────────────────────────────────────────────
 
-function Cover({ book, className = "" }: { book: BookEntry; className?: string }) {
+// Spine sizing is derived from the title so every book looks a little different.
+function spineStyle(book: BookEntry, i: number) {
+  const width = Math.min(52, Math.max(34, 26 + book.title.length * 0.9));
+  const height = [150, 136, 158, 144, 130, 154, 140][i % 7];
+  return { width, height };
+}
+
+const SHELF_ROWS = 3;
+
+function Spine({ book, index, onOpen }: { book: BookEntry; index: number; onOpen: () => void }) {
+  const { width, height } = spineStyle(book, index);
   return (
-    <div
-      className={`relative overflow-hidden rounded-r-md rounded-l-[3px] bg-gradient-to-br shadow-md ${book.color} ${className}`}
+    <motion.button
+      type="button"
+      onClick={onOpen}
+      aria-label={`Open ${book.title} by ${book.author}`}
+      className={`group relative shrink-0 cursor-pointer overflow-hidden rounded-[3px] bg-gradient-to-r shadow-[inset_-3px_0_6px_rgba(0,0,0,0.35),inset_2px_0_3px_rgba(255,255,255,0.15),2px_0_4px_rgba(0,0,0,0.35)] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${book.color}`}
+      style={{ width, height }}
+      initial={{ opacity: 0, y: -30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.04 * index, type: "spring", stiffness: 380, damping: 18 }}
+      whileHover={{ y: -12, rotate: -2 }}
+      whileTap={{ y: -24, scale: 1.05 }}
     >
-      {/* spine */}
-      <div className="absolute inset-y-0 left-0 w-[6px] bg-black/30" />
-      <div className="absolute inset-y-0 left-[6px] w-px bg-white/25" />
-      {/* hairline frame */}
-      <div className="absolute inset-[9px] left-[14px] rounded-sm border border-white/25" />
-      {/* centered serif composition */}
-      <div className="absolute inset-[9px] left-[14px] flex flex-col items-center justify-center gap-2 px-2 text-center">
-        <span aria-hidden className="text-[10px] text-white/50">✦</span>
-        <p className="font-serif text-[13px] font-semibold leading-snug text-white [text-wrap:balance]">
+      {/* gilt bands */}
+      <span aria-hidden className="absolute inset-x-0 top-3 h-px bg-amber-200/50" />
+      <span aria-hidden className="absolute inset-x-0 top-[15px] h-px bg-amber-200/30" />
+      <span aria-hidden className="absolute inset-x-0 bottom-3 h-px bg-amber-200/50" />
+      <span aria-hidden className="absolute inset-x-0 bottom-[15px] h-px bg-amber-200/30" />
+      <span className="absolute inset-x-0 inset-y-6 flex items-center justify-center overflow-hidden">
+        <span className="max-h-full truncate font-serif text-[12px] font-semibold tracking-wide text-white/90 [writing-mode:vertical-rl]">
           {book.title}
-        </p>
-        <span aria-hidden className="block h-px w-6 bg-white/40" />
-        <p className="text-[8.5px] uppercase tracking-[0.18em] text-white/65">
-          {book.author}
-        </p>
-      </div>
-    </div>
+        </span>
+      </span>
+    </motion.button>
+  );
+}
+
+function Bookshelf({ onOpen }: { onOpen: (i: number) => void }) {
+  const perRow = Math.ceil(BOOKS.length / SHELF_ROWS);
+  const rows = Array.from({ length: SHELF_ROWS }, (_, r) =>
+    BOOKS.slice(r * perRow, (r + 1) * perRow).map((b, j) => ({ b, i: r * perRow + j }))
+  ).filter((row) => row.length > 0);
+
+  return (
+    <motion.div
+      key="shelf"
+      initial={{ opacity: 0, scale: 0.97 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.3 }}
+      className="mx-auto max-w-md rounded-xl border-[10px] border-[#6b4528] bg-[#2b1c11] shadow-[inset_0_0_40px_rgba(0,0,0,0.6),0_20px_40px_-15px_rgba(0,0,0,0.5)] dark:border-[#4a2f1b]"
+    >
+      {rows.map((row, r) => (
+        <div key={r}>
+          <div className="flex h-[176px] items-end gap-[3px] px-4">
+            {row.map(({ b, i }) => (
+              <Spine key={b.title} book={b} index={i} onOpen={() => onOpen(i)} />
+            ))}
+          </div>
+          {/* plank */}
+          <div className="h-3 bg-gradient-to-b from-[#a0703f] to-[#6b4528] shadow-[0_6px_10px_rgba(0,0,0,0.5)]" />
+        </div>
+      ))}
+    </motion.div>
+  );
+}
+
+const EASE = [0.45, 0, 0.2, 1] as const;
+// Opening choreography (seconds)
+const T_ARRIVE = 0.7; // closed book flies in and turns to face us
+const T_COVER = 0.9; // cover swings open
+const T_LEAVES = 0.35; // stagger of fluttering pages
+
+function OpenBook({ book, onBack }: { book: BookEntry; onBack: () => void }) {
+  return (
+    <motion.div
+      key={book.title}
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, y: 30, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
+      className="[perspective:1800px]"
+    >
+      <motion.div
+        className="relative mx-auto max-w-xl [transform-style:preserve-3d]"
+        initial={{ x: "-25%", y: 60, rotateY: 75, rotateX: 20, scale: 0.55, opacity: 0 }}
+        animate={{ x: ["-25%", "-25%", "0%"], y: 0, rotateY: 0, rotateX: 0, scale: 1, opacity: 1 }}
+        transition={{
+          duration: T_ARRIVE,
+          ease: EASE,
+          x: { duration: T_ARRIVE + T_COVER, times: [0, T_ARRIVE / (T_ARRIVE + T_COVER), 1], ease: EASE },
+        }}
+      >
+        <div className="grid min-h-[300px] grid-cols-2 [transform-style:preserve-3d]">
+          {/* left half is empty until the cover lands there */}
+          <div />
+          {/* right page: the quote */}
+          <div className="relative flex items-center rounded-r-md bg-[#f8f3e6] p-5 shadow-[inset_18px_0_24px_-18px_rgba(0,0,0,0.3),0_20px_40px_-10px_rgba(0,0,0,0.45)] sm:p-8 dark:bg-[#e9e1cc]">
+            {/* page-edge stack */}
+            <div aria-hidden className="absolute inset-y-1 -right-1 w-1 rounded-r bg-[repeating-linear-gradient(to_bottom,#d8cfba_0px,#d8cfba_1px,#f5f0e2_1px,#f5f0e2_3px)]" />
+            <motion.p
+              className="font-serif text-[13px] italic leading-relaxed text-stone-700 sm:text-[15px]"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: T_ARRIVE + T_COVER + T_LEAVES * 2, duration: 0.6 }}
+            >
+              {book.quote ? <>&ldquo;{book.quote}&rdquo;</> : "—"}
+            </motion.p>
+          </div>
+        </div>
+
+        {/* fluttering leaves: visible only while turning */}
+        {[0, 1, 2].map((k) => (
+          <motion.div
+            key={k}
+            aria-hidden
+            className="absolute inset-y-[3px] right-[3px] w-[calc(50%-3px)] origin-left rounded-r-md bg-[#fbf7ec] shadow-md [backface-visibility:hidden]"
+            initial={{ rotateY: 0 }}
+            animate={{ rotateY: -180 }}
+            transition={{ delay: T_ARRIVE + T_COVER * 0.5 + k * T_LEAVES, duration: 0.7, ease: EASE }}
+          />
+        ))}
+
+        {/* front cover: outside = cover art, inside = title page */}
+        <motion.div
+          className="absolute inset-y-0 right-0 w-1/2 origin-left [transform-style:preserve-3d]"
+          initial={{ rotateY: 0 }}
+          animate={{ rotateY: -180 }}
+          transition={{ delay: T_ARRIVE, duration: T_COVER, ease: EASE }}
+        >
+          <div className={`absolute inset-0 rounded-r-md bg-gradient-to-br shadow-xl [backface-visibility:hidden] ${book.color}`}>
+            <div className="absolute inset-y-0 left-0 w-2 bg-black/30" />
+            <div className="absolute inset-3 left-5 flex flex-col items-center justify-center gap-2 rounded-sm border border-white/25 px-3 text-center">
+              <span aria-hidden className="text-[10px] text-white/50">✦</span>
+              <p className="font-serif text-base font-semibold text-white sm:text-lg">{book.title}</p>
+              <span aria-hidden className="block h-px w-6 bg-white/40" />
+              <p className="text-[9px] uppercase tracking-[0.18em] text-white/65">{book.author}</p>
+            </div>
+          </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 rounded-l-md bg-[#f8f3e6] p-5 text-center shadow-[inset_-18px_0_24px_-18px_rgba(0,0,0,0.3),0_20px_40px_-10px_rgba(0,0,0,0.45)] [backface-visibility:hidden] [transform:rotateY(180deg)] sm:p-8 dark:bg-[#e9e1cc]">
+            <span aria-hidden className="text-xs text-stone-400">✦</span>
+            <h3 className="font-serif text-lg font-semibold leading-snug text-stone-900 [text-wrap:balance] sm:text-2xl">
+              {book.title}
+            </h3>
+            <span aria-hidden className="block h-px w-8 bg-stone-400/60" />
+            <p className="text-[10px] uppercase tracking-[0.18em] text-stone-500 sm:text-xs">{book.author}</p>
+          </div>
+        </motion.div>
+      </motion.div>
+
+      <motion.button
+        type="button"
+        onClick={onBack}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: T_ARRIVE + T_COVER + 0.4 }}
+        className="mx-auto mt-8 flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+      >
+        <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M10 3L5 8l5 5" />
+        </svg>
+        Back to the shelf
+      </motion.button>
+    </motion.div>
   );
 }
 
@@ -143,84 +285,19 @@ function LibraryModal({ onClose }: { onClose: () => void }) {
         Reading List
       </h2>
       <p className="mt-1 text-sm text-stone-500 dark:text-zinc-400">
-        Books I keep coming back to.
+        Books I keep coming back to. Pull one off the shelf.
       </p>
 
-      <div className="mt-6 [perspective:1400px]">
-        <AnimatePresence mode="wait" initial={false}>
-          {book === null ? (
-            <motion.div
-              key="shelf"
-              className="grid grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4"
-              initial={{ opacity: 0, rotateY: -10 }}
-              animate={{ opacity: 1, rotateY: 0 }}
-              exit={{ opacity: 0, rotateY: 10 }}
-              transition={{ duration: 0.25, ease: "easeOut" }}
-              style={{ transformOrigin: "left center" }}
-            >
-              {BOOKS.map((b, i) => (
-                <motion.button
-                  key={b.title}
-                  type="button"
-                  onClick={() => setSelected(i)}
-                  className="group cursor-pointer text-left focus:outline-none"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.04 * i, type: "spring", stiffness: 320, damping: 26 }}
-                  whileHover={{ y: -4 }}
-                >
-                  <Cover book={b} className="aspect-[2/3] w-full transition-shadow duration-250 group-hover:shadow-xl" />
-                  <p className="mt-2.5 truncate text-[13px] font-semibold text-stone-800 dark:text-zinc-200">
-                    {b.title}
-                  </p>
-                  <p className="truncate text-[11px] text-stone-500 dark:text-zinc-500">
-                    {b.author}
-                  </p>
-                </motion.button>
-              ))}
-            </motion.div>
-          ) : (
-            <motion.div
-              key={book.title}
-              className="flex flex-col gap-6 sm:flex-row sm:gap-8"
-              initial={{ opacity: 0, rotateY: -65 }}
-              animate={{ opacity: 1, rotateY: 0 }}
-              exit={{ opacity: 0, rotateY: 25 }}
-              transition={{ type: "spring", stiffness: 220, damping: 28 }}
-              style={{ transformOrigin: "left center" }}
-            >
-              <div className="shrink-0">
-                <Cover book={book} className="aspect-[2/3] w-40" />
-                <button
-                  type="button"
-                  onClick={() => setSelected(null)}
-                  className="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-stone-500 transition-colors hover:text-stone-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-                >
-                  <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 3L5 8l5 5" />
-                  </svg>
-                  All books
-                </button>
-              </div>
-
-              <div className="min-w-0">
-                <h3 className="font-serif text-2xl font-semibold tracking-tight text-stone-900 dark:text-zinc-100">
-                  {book.title}
-                </h3>
-                <p className="mt-1 text-sm text-stone-500 dark:text-zinc-400">{book.author}</p>
-
-                {book.quote && (
-                  <blockquote className="relative mt-6 rounded-2xl bg-stone-50 p-5 pl-6 dark:bg-zinc-800/60">
-                    <span aria-hidden className="absolute left-0 top-3 h-[calc(100%-24px)] w-[3px] rounded-full bg-amber-500/50" />
-                    <p className="font-serif text-[15px] italic leading-relaxed text-stone-700 dark:text-zinc-300">
-                      &ldquo;{book.quote}&rdquo;
-                    </p>
-                  </blockquote>
-                )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+      <div className="mt-6">
+        <MotionConfig reducedMotion="user">
+          <AnimatePresence mode="wait" initial={false}>
+            {book === null ? (
+              <Bookshelf onOpen={setSelected} />
+            ) : (
+              <OpenBook book={book} onBack={() => setSelected(null)} />
+            )}
+          </AnimatePresence>
+        </MotionConfig>
       </div>
     </Modal>
   );
